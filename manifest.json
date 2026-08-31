@@ -1,0 +1,21 @@
+{
+  "name": "Recicla Água Santa",
+  "short_name": "Recicla",
+  "description": "Encontre pontos de descarte e aprenda a reciclar.",
+  "start_url": "/index.html",
+  "display": "standalone",
+  "background_color": "#03300b",
+  "theme_color": "#03300b",
+  "icons": [
+    {
+      "src": "logo-pino.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "logo-pino.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}

@@ -1,0 +1,748 @@
+:root {
+    --verde-principal: #03300b; 
+    --verde-escuro: #24513A;
+    --off-white: #F5F3EC;
+    --verde-claro-secundario: #E8EEE9;
+    --verde-lima: #B7C98A;
+    
+    --texto-escuro: #1D2923;
+    --texto-secundario: #657069;
+
+    --fonte-marca: 'Sora', sans-serif;
+    --fonte-titulo: 'Manrope', sans-serif;
+    --fonte-texto: 'Inter', sans-serif;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    background-color: var(--verde-principal);
+    font-family: var(--fonte-texto);
+    -webkit-font-smoothing: antialiased;
+}
+
+/* CONTAINER DA PRIMEIRA DOBRA COM ILUMINAÇÃO VISÍVEL */
+.primeira-dobra {
+    /* Luz verde mais vibrante no topo (#0d5c24) para vencer o contraste da tela */
+    background: radial-gradient(circle at 50% 0%, #0d5c24 0%, var(--verde-principal) 75%);
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    padding-bottom: 60px;
+    position: relative; 
+}
+
+/* CONTAINER DA PRIMEIRA DOBRA COM LUZ BRANCA */
+.primeira-dobra {
+    /* Cor base e o brilho branco no topo */
+    background-color: var(--verde-principal);
+    background-image: radial-gradient(circle at 50% 0%, rgba(255, 255, 255, 0.15) 0%, rgba(255, 255, 255, 0) 50%);
+    
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    padding-bottom: 60px;
+    position: relative; /* Necessário para a textura cobrir tudo */
+}
+
+/* CONTAINER DA PRIMEIRA DOBRA COM LUZ BRANCA */
+.primeira-dobra {
+    background-color: var(--verde-principal);
+    background-image: radial-gradient(circle at 50% 0%, rgba(255, 255, 255, 0.15) 0%, rgba(255, 255, 255, 0) 50%);
+    
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    padding-bottom: 60px;
+    position: relative; 
+}
+
+/* TEXTURA DE RUÍDO PIXELADO NA TELA INTEIRA (MAIS FORTE) */
+.primeira-dobra::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    
+    /* Aumentei a opacidade de 0.08 para 0.4 para o ruído aparecer bem */
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='2.5' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)' opacity='0.4'/%3E%3C/svg%3E");
+    
+    /* Troquei para soft-light para os pontinhos não sumirem no verde escuro */
+    mix-blend-mode: soft-light; 
+    
+    pointer-events: none; 
+    z-index: 0; 
+}
+
+/* Proteção para os textos e imagens ficarem nítidos por cima da textura */
+.navbar, .conteudo-principal {
+    position: relative;
+    z-index: 1;
+}
+
+
+.navbar {
+    padding: 6vh 20px 4vh 20px;
+    text-align: center;
+}
+
+.marca {
+    font-family: var(--fonte-marca);
+    font-weight: 800;
+    font-size: clamp(48px, 9vw, 100px); 
+    line-height: 0.9;
+    color: var(--off-white);
+    text-transform: uppercase;
+    letter-spacing: -0.03em;
+}
+
+.custom-c {
+    position: relative;
+    display: inline-block;
+}
+
+.custom-c::after {
+    content: '';
+    position: absolute;
+    bottom: 0.08em;
+    right: -0.05em;
+    width: 0.45em;
+    height: 0.45em;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 100 100' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M10,85 C50,90 85,75 80,30' fill='none' stroke='%23F5F3EC' stroke-width='14' stroke-linecap='square' /%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: bottom left;
+    background-size: contain;
+    pointer-events: none;
+}
+
+.conteudo-principal {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+}
+
+.slider-container {
+    width: 100%;
+    max-width: 1400px;
+    padding: 0 15px;
+    margin-bottom: 5vh;
+}
+
+.imagem-comparacao {
+    position: relative;
+    width: 100%;
+    aspect-ratio: 4 / 3;
+    border-radius: 20px;
+    overflow: hidden;
+    box-shadow: 0 24px 48px rgba(0,0,0,0.4);
+    background-color: var(--verde-principal);
+}
+
+@media (min-width: 768px) {
+    .imagem-comparacao {
+        aspect-ratio: 21 / 9;
+    }
+}
+
+/* NOVA ESTRUTURA DO SLIDER (Tamanho fixo de 100% para ambos) */
+.slider-camada {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+}
+
+.camada-fundo img, .camada-frente img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center;
+}
+
+.camada-frente {
+    /* Estado inicial: cortado 50% a partir da direita */
+    clip-path: inset(0 50% 0 0);
+    z-index: 2;
+}
+
+/* Textos perfeitamente alinhados e estáticos */
+.overlay-texto {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-family: var(--fonte-marca);
+    font-size: clamp(24px, 6vw, 64px);
+    font-weight: 800;
+    color: #FFFFFF;
+    text-shadow: 0 4px 20px rgba(0,0,0,0.8);
+    white-space: nowrap;
+    letter-spacing: -0.02em;
+    pointer-events: none;
+}
+
+.badge-instrucao {
+    position: absolute;
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    background-color: rgba(245, 243, 236, 0.9);
+    color: var(--verde-escuro);
+    font-family: var(--fonte-texto);
+    font-weight: 600;
+    font-size: 0.85rem;
+    padding: 8px 16px;
+    border-radius: 50px;
+    z-index: 10;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+    pointer-events: none;
+}
+
+.linha-divisoria {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 50%;
+    width: 2px;
+    background-color: var(--off-white);
+    transform: translateX(-50%);
+    pointer-events: none;
+    z-index: 10;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.setas {
+    background-color: var(--off-white);
+    color: var(--verde-escuro);
+    border-radius: 50%;
+    width: 48px;
+    height: 48px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 4px 16px rgba(0,0,0,0.3);
+}
+
+.slider-controle {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    opacity: 0;
+    cursor: ew-resize;
+    z-index: 20;
+}
+
+.textos {
+    text-align: center;
+    max-width: 700px;
+    padding: 0 20px;
+    margin-bottom: 40px;
+}
+
+.textos h2 {
+    font-family: var(--fonte-titulo);
+    font-weight: 700;
+    font-size: clamp(24px, 3.5vw, 40px);
+    color: #FFFFFF;
+    line-height: 1.2;
+    margin-bottom: 20px;
+}
+
+.textos p {
+    font-family: var(--fonte-texto);
+    font-weight: 400;
+    font-size: clamp(16px, 2vw, 18px);
+    color: var(--verde-claro-secundario);
+    line-height: 1.6;
+}
+
+.botoes-acao {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    width: 100%;
+    max-width: 400px;
+    padding: 0 20px;
+}
+
+@media (min-width: 600px) {
+    .botoes-acao {
+        flex-direction: row;
+        max-width: 700px;
+        justify-content: center;
+    }
+}
+
+.btn-principal, .btn-secundario {
+    font-family: var(--fonte-texto);
+    font-weight: 500;
+    text-align: center;
+    text-decoration: none;
+    padding: 18px 24px;
+    border-radius: 14px;
+    font-size: 1.05rem;
+    transition: all 0.3s ease;
+}
+
+.btn-principal {
+    background-color: var(--off-white);
+    color: var(--verde-escuro);
+    box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+    flex-grow: 1;
+}
+
+.btn-secundario {
+    background-color: transparent;
+    color: var(--off-white);
+    border: 2px solid var(--off-white);
+    flex-grow: 1;
+}
+
+.btn-principal:hover {
+    transform: translateY(-2px);
+    background-color: #FFFFFF;
+}
+
+.btn-secundario:hover {
+    background-color: rgba(245, 243, 236, 0.1);
+}
+
+/* ========================================= */
+/* --- ESTILOS DA PÁGINA DE BUSCA (ECOMAPA) -- */
+/* ========================================= */
+
+.pagina-interna {
+    background-color: var(--verde-claro-secundario);
+    color: var(--texto-escuro);
+    min-height: 100vh;
+}
+
+.navbar.interna {
+    background-color: var(--verde-principal);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px 20px;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+}
+
+.btn-voltar {
+    color: var(--off-white);
+    text-decoration: none;
+    font-family: var(--fonte-texto);
+    font-weight: 500;
+    font-size: 0.9rem;
+}
+
+.marca.menor {
+    font-size: 1.5rem;
+    margin: 0;
+}
+
+.busca-container {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 40px 20px;
+}
+
+.cabecalho-busca h2 {
+    font-family: var(--fonte-titulo);
+    font-size: 2rem;
+    color: var(--verde-principal);
+    margin-bottom: 10px;
+}
+
+.cabecalho-busca p {
+    color: var(--texto-secundario);
+    margin-bottom: 30px;
+}
+
+.filtro-card {
+    background-color: var(--off-white);
+    padding: 25px;
+    border-radius: 20px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+    margin-bottom: 40px;
+}
+
+.form-group {
+    margin-bottom: 20px;
+}
+
+.form-group label {
+    display: block;
+    font-family: var(--fonte-texto);
+    font-weight: 600;
+    color: var(--verde-escuro);
+    margin-bottom: 8px;
+    font-size: 0.95rem;
+}
+
+.form-group select {
+    width: 100%;
+    padding: 16px;
+    border-radius: 12px;
+    border: 1px solid #d1d8d4;
+    background-color: #FFFFFF;
+    font-family: var(--fonte-texto);
+    font-size: 1rem;
+    color: var(--texto-escuro);
+    outline: none;
+    transition: border 0.3s;
+}
+
+.form-group select:focus {
+    border-color: var(--verde-principal);
+}
+
+.btn-principal.full-width {
+    width: 100%;
+    background-color: var(--verde-principal);
+    color: var(--off-white);
+}
+
+.btn-principal.full-width:hover {
+    background-color: var(--verde-escuro);
+}
+
+/* CARDS DE RESULTADO */
+.resultados-container {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.ponto-card {
+    background-color: #FFFFFF;
+    padding: 25px;
+    border-radius: 16px;
+    border-left: 6px solid var(--verde-principal);
+    box-shadow: 0 4px 15px rgba(0,0,0,0.03);
+    transition: transform 0.2s;
+}
+
+.ponto-card:hover {
+    transform: translateX(5px);
+}
+
+.ponto-card h3 {
+    font-family: var(--fonte-titulo);
+    color: var(--verde-escuro);
+    font-size: 1.3rem;
+    margin-bottom: 12px;
+}
+
+.endereco, .contato {
+    font-size: 0.95rem;
+    color: var(--texto-secundario);
+    margin-bottom: 6px;
+}
+
+.tags-container {
+    margin-top: 15px;
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+}
+
+.tag {
+    background-color: var(--verde-lima);
+    color: var(--verde-escuro);
+    padding: 6px 12px;
+    border-radius: 50px;
+    font-size: 0.75rem;
+    font-weight: 600;
+    font-family: var(--fonte-texto);
+}
+
+.sem-resultado {
+    text-align: center;
+    color: var(--texto-secundario);
+    font-weight: 500;
+    padding: 20px;
+}
+/* AJUSTES FINAIS PARA A PÁGINA DE BUSCA */
+
+/* Ajusta o tamanho da logo na barra do EcoMapa para caber em 2 linhas */
+.marca.menor {
+    font-size: 1.1rem;
+    text-align: right;
+    line-height: 1.1;
+    margin: 0;
+}
+
+/* Botão do Google Maps */
+.btn-maps {
+    display: inline-block;
+    margin-top: 18px;
+    padding: 10px 16px;
+    background-color: var(--verde-claro-secundario);
+    color: var(--verde-escuro);
+    text-decoration: none;
+    border-radius: 8px;
+    font-family: var(--fonte-texto);
+    font-size: 0.9rem;
+    font-weight: 600;
+    transition: background 0.3s;
+}
+
+.btn-maps:hover {
+    background-color: var(--verde-lima);
+    color: var(--texto-escuro);
+}
+
+/* ========================================= */
+/* -- ESTILOS DA PÁGINA DE CONSCIENTIZAÇÃO - */
+/* ========================================= */
+
+.text-page {
+    background-color: var(--off-white);
+}
+
+.conscientizacao-container {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 40px 20px 60px 20px;
+}
+
+/* Cabeçalho de Impacto */
+.impacto-header {
+    text-align: center;
+    margin-bottom: 50px;
+}
+
+.impacto-header h2 {
+    font-family: var(--fonte-titulo);
+    font-size: clamp(1.8rem, 3vw, 2.5rem);
+    color: var(--verde-principal);
+    line-height: 1.2;
+    margin-bottom: 20px;
+}
+
+.impacto-header p {
+    font-size: 1.1rem;
+    color: var(--texto-escuro);
+    max-width: 650px;
+    margin: 0 auto;
+}
+
+.titulo-sessao {
+    font-family: var(--fonte-titulo);
+    font-size: 1.4rem;
+    color: var(--verde-escuro);
+    margin-bottom: 25px;
+    border-bottom: 2px solid var(--verde-claro-secundario);
+    padding-bottom: 10px;
+}
+
+/* Cards de Guia Prático */
+.guias-container {
+    display: flex;
+    flex-direction: column;
+    gap: 30px;
+    margin-bottom: 50px;
+}
+
+.guia-card {
+    background-color: #FFFFFF;
+    border-radius: 16px;
+    padding: 30px 25px;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.04);
+    border: 1px solid var(--verde-claro-secundario);
+}
+
+@media (min-width: 600px) {
+    .guia-card {
+        flex-direction: row;
+        align-items: flex-start;
+    }
+}
+
+/* Ícones usando a paleta de cores combinada */
+.guia-icone {
+    font-size: 2.5rem;
+    background-color: var(--verde-claro-secundario);
+    width: 70px;
+    height: 70px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 20px;
+    flex-shrink: 0;
+}
+
+.guia-icone.oleo { background-color: rgba(183, 201, 138, 0.3); } /* Verde lima bem fraco */
+.guia-icone.eletronico { background-color: rgba(121, 85, 72, 0.1); } /* O Marrom terra aparece aqui! */
+.guia-icone.reciclavel { background-color: rgba(63, 125, 90, 0.15); } 
+
+.guia-conteudo h4 {
+    font-family: var(--fonte-titulo);
+    font-size: 1.3rem;
+    color: var(--verde-escuro);
+    margin-bottom: 5px;
+}
+
+.impacto-dado {
+    font-size: 0.9rem;
+    color: var(--marrom-terra); /* Marrom usado como alerta/destaque */
+    font-weight: 600;
+    margin-bottom: 15px;
+    background-color: rgba(121, 85, 72, 0.05);
+    padding: 8px 12px;
+    border-radius: 8px;
+    display: inline-block;
+}
+
+.passo-a-passo {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.passo-a-passo li {
+    font-size: 0.95rem;
+    color: var(--texto-secundario);
+    line-height: 1.5;
+}
+
+.passo-a-passo li strong {
+    color: var(--verde-principal);
+}
+
+/* CTA Final */
+.cta-final {
+    background-color: var(--verde-principal);
+    padding: 40px 30px;
+    border-radius: 20px;
+    text-align: center;
+    color: var(--off-white);
+}
+
+.cta-final h3 {
+    font-family: var(--fonte-titulo);
+    font-size: 1.8rem;
+    margin-bottom: 10px;
+}
+
+.cta-final p {
+    margin-bottom: 25px;
+    color: var(--verde-claro-secundario);
+}
+
+.cta-final .btn-principal {
+    background-color: var(--off-white);
+    color: var(--verde-escuro);
+    display: inline-block;
+}
+
+.cta-final .btn-principal:hover {
+    background-color: #FFFFFF;
+    transform: translateY(-2px);
+}
+/* AJUSTES PARA AS TAGS DE DADOS EXTRAS NA CONSCIENTIZAÇÃO */
+
+.dados-extras {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    margin: 15px 0;
+}
+
+.badge-tempo, .badge-venda {
+    font-size: 0.85rem;
+    padding: 10px 14px;
+    border-radius: 8px;
+    line-height: 1.4;
+    font-family: var(--fonte-texto);
+    color: var(--texto-escuro);
+}
+
+.badge-tempo {
+    background-color: rgba(232, 238, 233, 0.7); /* Fundo verde clarinho */
+    border-left: 4px solid var(--texto-secundario);
+}
+
+.badge-venda {
+    background-color: rgba(183, 201, 138, 0.2); /* Fundo lima bem clarinho */
+    border-left: 4px solid var(--verde-lima);
+}
+
+.exemplos-texto {
+    font-size: 0.95rem;
+    color: var(--verde-escuro);
+    margin-bottom: 5px;
+}
+/* ========================================= */
+/* ----- TOGGLES DA SESSÃO EDUCATIVA ------- */
+/* ========================================= */
+.sessao-educativa {
+    margin-bottom: 50px;
+}
+
+.toggle-educativo {
+    background-color: #FFFFFF;
+    border-radius: 12px;
+    padding: 20px;
+    margin-bottom: 15px;
+    border: 1px solid var(--verde-claro-secundario);
+    box-shadow: 0 4px 15px rgba(0,0,0,0.02);
+}
+
+.toggle-educativo summary {
+    font-family: var(--fonte-titulo);
+    font-size: 1.15rem;
+    color: var(--verde-escuro);
+    cursor: pointer;
+    list-style: none; /* Esconde a setinha nativa */
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+/* Remove a setinha nativa no Chrome/Safari */
+.toggle-educativo summary::-webkit-details-marker {
+    display: none;
+}
+
+/* Adiciona o sinal de + e - */
+.toggle-educativo summary::after {
+    content: '+';
+    font-size: 1.8rem;
+    color: var(--verde-principal);
+    transition: transform 0.3s;
+    line-height: 1;
+}
+
+.toggle-educativo[open] summary::after {
+    content: '-';
+    transform: rotate(180deg);
+}
+
+.toggle-conteudo {
+    margin-top: 15px;
+    padding-top: 15px;
+    border-top: 1px solid var(--verde-claro-secundario);
+}
+
+.toggle-conteudo p {
+    font-size: 1rem;
+    color: var(--texto-secundario);
+    line-height: 1.6;
+    margin-bottom: 15px;
+}

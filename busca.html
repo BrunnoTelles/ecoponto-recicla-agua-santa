@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EcoMapa - Recicla Água Santa</title>
+    <link rel="icon" type="image/png" href="logo-pino.png">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Manrope:wght@700&family=Sora:wght@800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#03300b">
+    <link rel="apple-touch-icon" href="logo-pino.png">
+</head>
+<body class="pagina-interna text-page">
+</head>
+<body class="pagina-interna">
+    <script>
+      if ('serviceWorker' in navigator) {
+        window.addEventListener('load', () => {
+          navigator.serviceWorker.register('/sw.js')
+            .then(reg => console.log('Service Worker registrado!'))
+            .catch(err => console.log('Erro no Service Worker', err));
+        });
+      }
+    </script>
+</body>
+</html>
+    <nav class="navbar interna">
+        <a href="index.html" class="btn-voltar">&larr; Voltar</a>
+        <h1 class="marca menor">RE<span class="custom-c">C</span>ICLA<br>ÁGUA SANTA</h1>
+    </nav>
+
+    <main class="busca-container">
+        <div class="cabecalho-busca">
+            <h2>Onde descartar?</h2>
+            <p>Selecione o tipo de material e a <strong>região onde você mora ou trabalha</strong> para encontrar o ponto de coleta mais adequado e próximo a&nbsp;você.</p>
+        </div>
+
+        <div class="filtro-card">
+            <div class="form-group">
+                <label for="tipo-material">O que você quer descartar?</label>
+                <select id="tipo-material">
+                    <option value="todos">Todos os materiais</option>
+                    <option value="oleo">Óleo de Cozinha</option>
+                    <option value="eletronico">Lixo Eletrônico (Fios, Celulares, Baterias)</option>
+                    <option value="reciclavel">Recicláveis Comuns (Papelão, Plástico, Lâmpadas, Vidro)</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="regiao">Onde você está?</label>
+                <select id="regiao">
+                    <option value="todas">Qualquer região</option>
+                    <option value="norte">Zona Norte (Água Santa, Méier, Madureira, Tijuca)</option>
+                    <option value="oeste">Zona Oeste (Jacarepaguá, Barra da Tijuca, Recreio)</option>
+                    <option value="sudoeste">Zona Sudoeste (Campo Grande, Bangu, Santa Cruz)</option>
+                    <option value="sul-centro">Centro e Zona Sul (Copacabana, Botafogo, Lapa)</option>
+                </select>
+            </div>
+
+            <button id="btn-buscar" class="btn-principal full-width">Encontrar locais</button>
+        </div>
+
+        <div id="resultados" class="resultados-container"></div>
+    </main>
+
+<script>
+const pontosColeta = [
+            {
+                nome: "Líder Óleo - Coleta de Óleo Vegetal",
+                material: "oleo",
+                regiao: ["norte", "oeste", "sul-centro"],
+                endereco: "Atendimento Móvel (Coleta em toda a Zona Norte, Oeste e Centro)",
+                contato: "(21) 98118-2020",
+                tags: ["Faz coleta na Associação", "Compra óleo usado", "Troca por produtos de limpeza"]
+                // Sem link/botão extra pois as URLs estavam inativas
+            },
+            {
+                nome: "Soya Recicla / Disque Óleo",
+                material: "oleo",
+                regiao: ["norte", "oeste"],
+                endereco: "Coleta agendada para condomínios e associações (Atende Grande Méier e Jacarepaguá)",
+                contato: "0800 770 0156",
+                tags: ["Coleta em grandes volumes", "Focado em Associações"]
+                // Sem link/botão extra pois as URLs estavam inativas
+            },
+            {
+                nome: "Programa PROVE (Supermercados Mundial)",
+                material: "oleo",
+                regiao: "norte",
+                endereco: "R. Gustavo Riedel, 26 - Engenho de Dentro",
+                contato: "(21) 2593-3335 | @supermercadosmundial",
+                tags: ["Recebe garrafas PET com óleo", "Ponto Fixo"],
+                linkUrl: "https://www.google.com/maps/search/?api=1&query=Rua+Gustavo+Riedel,+26+-+Engenho+de+Dentro,+Rio+de+Janeiro",
+                tipoLink: "mapa"
+            },
+            {
+                nome: "Green Eletron - NorteShopping",
+                material: "eletronico",
+                regiao: "norte",
+                endereco: "Av. Dom Hélder Câmara, 5474 - Cachambi (Urnas no 1º Piso)",
+                contato: "(21) 3178-5474 | @norteshoppingrj",
+                tags: ["Ponto Fixo", "Urnas no 1º Piso", "Aceita pilhas e portáteis"],
+                linkUrl: "https://www.google.com/maps/search/?api=1&query=Av.+Dom+Helder+Camara,+5474+-+Cachambi,+Rio+de+Janeiro",
+                tipoLink: "mapa"
+            },
+            {
+                nome: "TechTrash - Shopping Nova América",
+                material: "eletronico",
+                regiao: "norte",
+                endereco: "Av. Pastor Martin Luther King Jr., 126 - Del Castilho",
+                contato: "(21) 3083-1000 | @shoppingnovaamerica",
+                tags: ["Ponto Fixo", "Descarte de Cabos e Celulares"],
+                linkUrl: "https://www.google.com/maps/search/?api=1&query=Av.+Pastor+Martin+Luther+King+Jr.,+126+-+Del+Castilho,+Rio+de+Janeiro",
+                tipoLink: "mapa"
+            },
+            {
+                nome: "Ecoponto BarraShopping",
+                material: "eletronico",
+                regiao: "oeste",
+                endereco: "Av. das Américas, 4666 - Barra da Tijuca",
+                contato: "(21) 3089-1000 | @barrashoppingoficial",
+                tags: ["Ponto Fixo", "Destinação Ecológica"],
+                linkUrl: "https://www.google.com/maps/search/?api=1&query=Av.+das+Americas,+4666+-+Barra+da+Tijuca,+Rio+de+Janeiro",
+                tipoLink: "mapa"
+            },
+            {
+                nome: "Estação de Reciclagem Pão de Açúcar (Tijuca)",
+                material: "reciclavel",
+                regiao: "norte",
+                endereco: "R. Conde de Bonfim, 175 - Tijuca",
+                contato: "(21) 2254-4444 | @paodeacucar",
+                tags: ["Aceita Plástico, Vidro e Papelão", "Ponto Fixo"],
+                linkUrl: "https://www.google.com/maps/search/?api=1&query=R.+Conde+de+Bonfim,+175+-+Tijuca,+Rio+de+Janeiro",
+                tipoLink: "mapa"
+            },
+            {
+                nome: "Estação de Reciclagem Pão de Açúcar (Copacabana)",
+                material: "reciclavel",
+                regiao: "sul-centro",
+                endereco: "Av. Nossa Sra. de Copacabana, 493 - Copacabana",
+                contato: "(21) 2548-5222 | @paodeacucar",
+                tags: ["Aceita Plástico, Vidro e Papelão", "Próximo ao Metrô"],
+                linkUrl: "https://www.google.com/maps/search/?api=1&query=Av.+Nossa+Sra.+de+Copacabana,+493+-+Copacabana,+Rio+de+Janeiro",
+                tipoLink: "mapa"
+            },
+            {
+                nome: "Ecoponto Comlurb (Madureira)",
+                material: "reciclavel",
+                regiao: "norte",
+                endereco: "Praça do Patriarca, s/n - Madureira",
+                contato: "1746 (Central da Prefeitura) | @comlurbcomunica",
+                tags: ["Aceita Recicláveis Volumosos", "Ponto Público"],
+                linkUrl: "https://www.google.com/maps/search/?api=1&query=Praca+do+Patriarca+-+Madureira,+Rio+de+Janeiro",
+                tipoLink: "mapa"
+            },
+            {
+                nome: "Ecoponto Comlurb (Freguesia/Jacarepaguá)",
+                material: "reciclavel",
+                regiao: "oeste",
+                endereco: "Rua Tirol, esquina com Rua Comandante Rubens Silva - Freguesia",
+                contato: "1746 (Central da Prefeitura) | @comlurbcomunica",
+                tags: ["Aceita Recicláveis Volumosos", "Ponto Público"],
+                linkUrl: "https://www.google.com/maps/search/?api=1&query=Rua+Tirol+esquina+Comandante+Rubens+Silva,+Freguesia,+Rio+de+Janeiro",
+                tipoLink: "mapa"
+            }
+        ];
+
+        const btnBuscar = document.getElementById('btn-buscar');
+        const selectMaterial = document.getElementById('tipo-material');
+        const selectRegiao = document.getElementById('regiao');
+        const containerResultados = document.getElementById('resultados');
+
+        function renderizarResultados(lista) {
+            containerResultados.innerHTML = ""; 
+            
+            if (lista.length === 0) {
+                containerResultados.innerHTML = "<p class='sem-resultado'>Nenhum ponto de coleta encontrado para esses filtros. Tente alterar a região.</p>";
+                return;
+            }
+
+            lista.forEach(ponto => {
+                const tagsHTML = ponto.tags.map(tag => `<span class="tag">${tag}</span>`).join('');
+                let btnHtml = "";
+                
+                if(ponto.linkUrl) {
+                    if(ponto.tipoLink === "mapa") {
+                        btnHtml = `<a href="${ponto.linkUrl}" target="_blank" class="btn-maps">
+                                     <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="margin-right: 5px; vertical-align: middle;"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg>
+                                     Abrir no Mapa
+                                   </a>`;
+                    } else {
+                        btnHtml = `<a href="${ponto.linkUrl}" target="_blank" class="btn-maps" style="background-color: var(--off-white); border: 1px solid var(--verde-claro-secundario);">
+                                     <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="margin-right: 5px; vertical-align: middle;"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path><polyline points="15 3 21 3 21 9"></polyline><line x1="10" y1="14" x2="21" y2="3"></line></svg>
+                                     Acessar Site
+                                   </a>`;
+                    }
+                }
+                
+                const card = `
+                    <div class="ponto-card">
+                        <h3>${ponto.nome}</h3>
+                        <p class="endereco">${ponto.endereco}</p>
+                        <p class="contato">📞 ${ponto.contato}</p>
+                        <div class="tags-container">${tagsHTML}</div>
+                        ${btnHtml}
+                    </div>
+                `;
+                containerResultados.innerHTML += card;
+            });
+        }
+
+        btnBuscar.addEventListener('click', () => {
+            const matBuscado = selectMaterial.value;
+            const regBuscada = selectRegiao.value;
+
+            const resultadosFiltrados = pontosColeta.filter(ponto => {
+                const materialBate = matBuscado === 'todos' || ponto.material === matBuscado;
+                let regiaoBate = false;
+                if (regBuscada === 'todas') {
+                    regiaoBate = true;
+                } else if (Array.isArray(ponto.regiao)) {
+                    regiaoBate = ponto.regiao.includes(regBuscada);
+                } else {
+                    regiaoBate = ponto.regiao === regBuscada;
+                }
+                
+                return materialBate && regiaoBate;
+            });
+
+            renderizarResultados(resultadosFiltrados);
+        });
+    </script>
+</body>
+</html>
