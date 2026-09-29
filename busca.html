@@ -54,7 +54,7 @@
                 <select id="regiao">
                     <option value="todas">Qualquer região</option>
                     <option value="norte">Zona Norte (Água Santa, Méier, Madureira, Tijuca)</option>
-                    <option value="oeste">Zona Sudoeste (Jacarepaguá, Barra da Tijuca, Recreio)</option>
+                    <option value="Sudoeste">Zona Sudoeste (Jacarepaguá, Barra da Tijuca, Recreio)</option>
                     <option value="sul-centro">Centro e Zona Sul (Copacabana, Botafogo, Lapa)</option>
                 </select>
             </div>
@@ -70,8 +70,8 @@ const pontosColeta = [
             {
                 nome: "Líder Óleo - Coleta de Óleo Vegetal",
                 material: "oleo",
-                regiao: ["norte", "oeste", "sul-centro"],
-                endereco: "Atendimento Móvel (Coleta em toda a Zona Norte, Oeste e Centro)",
+                regiao: ["norte", "Sudoeste", "sul-centro"],
+                endereco: "Atendimento Móvel (Coleta em toda a Zona Norte, Sudoeste e Centro)",
                 contato: "(21) 98118-2020",
                 tags: ["Faz coleta na Associação", "Compra óleo usado", "Troca por produtos de limpeza"]
                 // Sem link/botão extra pois as URLs estavam inativas
@@ -79,7 +79,7 @@ const pontosColeta = [
             {
                 nome: "Soya Recicla / Disque Óleo",
                 material: "oleo",
-                regiao: ["norte", "oeste"],
+                regiao: ["norte", "sudoeste"],
                 endereco: "Coleta agendada para condomínios e associações (Atende Grande Méier e Jacarepaguá)",
                 contato: "0800 770 0156",
                 tags: ["Coleta em grandes volumes", "Focado em Associações"]
@@ -118,7 +118,7 @@ const pontosColeta = [
             {
                 nome: "Ecoponto BarraShopping",
                 material: "eletronico",
-                regiao: "oeste",
+                regiao: "sudoeste",
                 endereco: "Av. das Américas, 4666 - Barra da Tijuca",
                 contato: "(21) 3089-1000 | @barrashoppingoficial",
                 tags: ["Ponto Fixo", "Destinação Ecológica"],
