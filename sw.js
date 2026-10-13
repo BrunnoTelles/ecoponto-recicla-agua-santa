@@ -1,4 +1,4 @@
-const CACHE_NAME = 'recicla-v1';
+const CACHE_NAME = 'recicla-v3';
 const urlsToCache = [
   '/',
   '/index.html',
@@ -6,6 +6,8 @@ const urlsToCache = [
   '/conscientizacao.html',
   '/style.css',
   '/logo-pino.png',
+  '/logo-192.png',
+  '/logo-512.png',
   '/rua-limpa.jpg',
   '/rua-suja.jpg'
 ];
