@@ -9,7 +9,7 @@ const urlsToCache = [
   '/logo-192.png',
   '/logo-512.png',
   '/rua-limpa.jpg',
-  '/rua-suja.jpg,'
+  '/rua-suja.jpg',
   '/manifest.json'
 ];
 
