@@ -1,4 +1,4 @@
-const CACHE_NAME = 'recicla-v3';
+const CACHE_NAME = 'recicla-v4';
 const urlsToCache = [
   '/',
   '/index.html',
@@ -9,7 +9,8 @@ const urlsToCache = [
   '/logo-192.png',
   '/logo-512.png',
   '/rua-limpa.jpg',
-  '/rua-suja.jpg'
+  '/rua-suja.jpg,'
+  '/manifest.json'
 ];
 
 self.addEventListener('install', event => {
